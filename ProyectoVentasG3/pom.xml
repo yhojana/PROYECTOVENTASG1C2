@@ -75,5 +75,6 @@
                 </configuration>
             </plugin>            
         </plugins>
-    </build>    
+    </build>
+    <name>ProyectoVentasPrimorG1C2</name>
 </project>
