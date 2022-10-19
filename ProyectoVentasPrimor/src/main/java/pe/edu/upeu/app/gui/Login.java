@@ -55,12 +55,12 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jTexfieldPH_FielTex1 = new LIB.JTexfieldPH_FielTex();
+        txtUsuario = new LIB.JTexfieldPH_FielTex();
         jPanel6 = new javax.swing.JPanel();
-        jTexfieldPH_Password1 = new LIB.JTexfieldPH_Password();
+        txtclave = new LIB.JTexfieldPH_Password();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        button1 = new java.awt.Button();
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -107,29 +107,29 @@ public class Login extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTexfieldPH_FielTex1.setBackground(new java.awt.Color(204, 204, 204));
-        jTexfieldPH_FielTex1.setBorder(null);
-        jTexfieldPH_FielTex1.setForeground(new java.awt.Color(153, 153, 255));
-        jTexfieldPH_FielTex1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        jTexfieldPH_FielTex1.setPhColor(new java.awt.Color(102, 102, 255));
-        jTexfieldPH_FielTex1.setPlaceholder("Usuario :)");
-        jTexfieldPH_FielTex1.addActionListener(new java.awt.event.ActionListener() {
+        txtUsuario.setBackground(new java.awt.Color(204, 204, 204));
+        txtUsuario.setBorder(null);
+        txtUsuario.setForeground(new java.awt.Color(153, 153, 255));
+        txtUsuario.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        txtUsuario.setPhColor(new java.awt.Color(102, 102, 255));
+        txtUsuario.setPlaceholder("Usuario :)");
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTexfieldPH_FielTex1ActionPerformed(evt);
+                txtUsuarioActionPerformed(evt);
             }
         });
-        jPanel5.add(jTexfieldPH_FielTex1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 50));
+        jPanel5.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 50));
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 240, 50));
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
 
-        jTexfieldPH_Password1.setBackground(new java.awt.Color(204, 204, 204));
-        jTexfieldPH_Password1.setBorder(null);
-        jTexfieldPH_Password1.setForeground(new java.awt.Color(153, 153, 255));
-        jTexfieldPH_Password1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        jTexfieldPH_Password1.setPhColor(new java.awt.Color(153, 153, 255));
-        jTexfieldPH_Password1.setPlaceholder("Contraseña :)");
+        txtclave.setBackground(new java.awt.Color(204, 204, 204));
+        txtclave.setBorder(null);
+        txtclave.setForeground(new java.awt.Color(153, 153, 255));
+        txtclave.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        txtclave.setPhColor(new java.awt.Color(153, 153, 255));
+        txtclave.setPlaceholder("Contraseña :)");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -137,12 +137,12 @@ public class Login extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTexfieldPH_Password1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtclave, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTexfieldPH_Password1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(txtclave, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
         );
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, -1));
@@ -153,15 +153,6 @@ public class Login extends javax.swing.JFrame {
         jCheckBox1.setBorder(null);
         jPanel2.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 260, 30));
 
-        jLabel6.setBackground(new java.awt.Color(153, 153, 255));
-        jLabel6.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("INGRESE");
-        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel6.setOpaque(true);
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 290, 30));
-
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_delete_deleteusers_delete_male_user_maleclient_2348.png"))); // NOI18N
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -171,6 +162,17 @@ public class Login extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, 30));
+
+        button1.setBackground(new java.awt.Color(153, 153, 255));
+        button1.setFont(new java.awt.Font("Dubai Medium", 0, 18)); // NOI18N
+        button1.setForeground(new java.awt.Color(255, 255, 255));
+        button1.setLabel("INGRESE");
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(button1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 284, 110, 40));
 
         jLabel8.setBackground(new java.awt.Color(153, 153, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -206,30 +208,48 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTexfieldPH_FielTex1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTexfieldPH_FielTex1ActionPerformed
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTexfieldPH_FielTex1ActionPerformed
+    }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
  System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jLabel1MouseClicked
 
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+        
+        
+        //Accion de Iniciar
+        if(txtUsuario.getText().equals("yhojana")&& txtclave.getText().equals("123456")){
+            System.out.println("Entro Aqui!!");
+            GUIMain guiMain = new GUIMain();
+            guiMain.setVisible(true);
+            this.dispose();
+        }else{
+           
+    }//GEN-LAST:event_button1ActionPerformed
+         
+           
+        
+    
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Button button1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private LIB.JTexfieldPH_FielTex jTexfieldPH_FielTex1;
-    private LIB.JTexfieldPH_Password jTexfieldPH_Password1;
+    private LIB.JTexfieldPH_FielTex txtUsuario;
+    private LIB.JTexfieldPH_Password txtclave;
     // End of variables declaration//GEN-END:variables
 }
