@@ -32,11 +32,7 @@
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE140</version>
         </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>FS-FactorySystem</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
+        
     </dependencies>
     
     <repositories>
