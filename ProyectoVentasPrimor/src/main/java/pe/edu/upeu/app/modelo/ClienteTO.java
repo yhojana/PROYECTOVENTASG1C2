@@ -14,5 +14,4 @@ import lombok.Data;
 @Data
 public class ClienteTO {
     String dniruc, nombrers, tipo;
-    
 }
