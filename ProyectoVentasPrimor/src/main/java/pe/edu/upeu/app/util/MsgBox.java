@@ -20,7 +20,9 @@ import javax.swing.JPanel;
 public class MsgBox {
     JPanel p=new JPanel();
     UtilsX util=new UtilsX();
-    ImageIcon icon;
+    ImageIcon icon = null;
+    public MsgBox (){
+    }
 
     public MsgBox(String msg, int tipoDialog, String iconPropio) {
         
@@ -32,5 +34,17 @@ public class MsgBox {
         }
                       
     } 
-    
+    public int showConfirmCustom(String msg, String title, String iconPropio){
+int input;
+// 0=ok, 2=cancel
+if (!iconPropio.trim().equals("")) {
+icon = new ImageIcon(obj.getFile(iconPropio));
+input= JOptionPane.showConfirmDialog(p, msg, title, JOptionPane.OK_CANCEL_OPTION,
+JOptionPane.INFORMATION_MESSAGE, icon);
+}else{
+input= JOptionPane.showConfirmDialog(p, msg, title, JOptionPane.OK_CANCEL_OPTION,
+JOptionPane.INFORMATION_MESSAGE);
+}
+return input;
+}
 }

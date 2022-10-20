@@ -14,40 +14,41 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import pe.edu.upeu.app.dao.conx.Conn;
-import pe.edu.upeu.app.modelo.ClienteTO;
+import pe.edu.upeu.app.modelo.ProductoTO;
 import pe.edu.upeu.app.util.ErrorLogger;
 
 /**
  *
- * @author LABORATORIO_2
+ * @author Usuario
  */
-public class ClienteDao implements ClienteDaoI {
+public class ProductoDao implements ProductoDaoI {
 
     Statement stmt = null;
     Vector columnNames;
     Vector visitdata;
     Connection connection = Conn.connectSQLite();
     static PreparedStatement ps;
-    static ErrorLogger log = new ErrorLogger(ClienteDao.class.getName());
+    static ErrorLogger log = new ErrorLogger(ProductoDao.class.getName());
     ResultSet rs = null;
 
-    public ClienteDao() {
+    public ProductoDao() {
         columnNames = new Vector();
         visitdata = new Vector();
     }
 
     @Override
-    public int create(ClienteTO d) {
+    public int create(ProductoTO d) {
         int rsId = 0;
-        String[] returns = {"dniruc"};
-        String sql = "INSERT INTO cliente(dniruc, nombrers, tipo) "
+        String[] returns = {"URL"};
+        String sql = "INSERT INTO producto(URL, nombrers, precio, estado) "
                 + "VALUES(?,?,?)";
         int i = 0;
         try {
             ps = connection.prepareStatement(sql, returns);
-            ps.setString(++i, d.getDniruc());
+            ps.setString(++i, d.getURL());
             ps.setString(++i, d.getNombrers());
-            ps.setString(++i, d.getTipo());
+            ps.setString(++i, d.getPrecio());
+            ps.setString(++i, d.getEstado());
             rsId = ps.executeUpdate();// 0 no o 1 si commit
             try ( ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -63,19 +64,21 @@ public class ClienteDao implements ClienteDaoI {
     }
 
     @Override
-    public int update(ClienteTO d) {
-        System.out.println("actualizar d.getDniruc: " + d.getDniruc());
+    public int update(ProductoTO d) {
+        System.out.println("actualizar d.getURL: " + d.getURL());
         int comit = 0;
-        String sql = "UPDATE cliente SET "
+        String sql = "UPDATE producto SET "
                 + "nombrers=?, "
-                + "tipo=? "
-                + "WHERE dniruc=?";
+                + "precio=?, "
+                + "estado=? "
+                + "WHERE URL=?";
         int i = 0;
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(++i, d.getNombrers());
-            ps.setString(++i, d.getTipo());
-            ps.setString(++i, d.getDniruc());
+            ps.setString(++i, d.getPrecio());
+            ps.setString(++i, d.getEstado());
+            ps.setString(++i, d.getURL());
             comit = ps.executeUpdate();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "update", ex);
@@ -86,7 +89,7 @@ public class ClienteDao implements ClienteDaoI {
     @Override
     public int delete(String id) throws Exception {
         int comit = 0;
-        String sql = "DELETE FROM cliente WHERE dniruc = ?";
+        String sql = "DELETE FROM producto WHERE URL = ?";
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, id);
@@ -100,56 +103,58 @@ public class ClienteDao implements ClienteDaoI {
     }
 
     @Override
-    public List<ClienteTO> listCmb(String filter) {
-        List<ClienteTO> ls = new ArrayList();
-        ls.add(new ClienteTO());
-        ls.addAll(listarClientes());
+    public List<ProductoTO> listCmb(String filter) {
+        List<ProductoTO> ls = new ArrayList();
+        ls.add(new ProductoTO());
+        ls.addAll(listarProductos());
         return ls;
     }
 
     @Override
-    public List listarClientes() {
-        List<ClienteTO> listarclientes = new ArrayList();
+    public List listarProductos() {
+        List<ProductoTO> listarproductos = new ArrayList();
         String sql = "SELECT * FROM cliente";
         try {
             connection = new Conn().connectSQLite();
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                ClienteTO cli = new ClienteTO();
-                cli.setDniruc(rs.getString("dniruc"));
+                ProductoTO cli = new ProductoTO();
+                cli.setURL(rs.getString("url"));
                 cli.setNombrers(rs.getString("nombrers"));
-                cli.setTipo(rs.getString("tipo"));
-                listarclientes.add(cli);
+                cli.setPrecio(rs.getString("precio"));
+                cli.setEstado(rs.getString("estado"));
+                listarproductos.add(cli);
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
-        return listarclientes;
+        return listarproductos;
     }
 
     @Override
-    public ClienteTO buscarClientes(String dni) {
-        ClienteTO cliente = new ClienteTO();
-        String sql = "SELECT * FROM cliente WHERE dniruc = ?";
+    public ProductoTO buscarProductos(String URL) {
+        ProductoTO producto = new ProductoTO();
+        String sql = "SELECT * FROM producto WHERE url = ?";
         try {
             connection = new Conn().connectSQLite();
             ps = connection.prepareStatement(sql);
-            ps.setString(1, dni);
+            ps.setString(1, URL);
             rs = ps.executeQuery();
             if (rs.next()) {
-                cliente.setDniruc(rs.getString("dniruc"));
-                cliente.setNombrers(rs.getString("nombrers"));
-                cliente.setTipo(rs.getString("tipo"));
+                producto.setURL(rs.getString("url"));
+                producto.setNombrers(rs.getString("nombrers"));
+                producto.setPrecio(rs.getString("precio"));
+                producto.setEstado(rs.getString("estado"));
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
-        return cliente;
+        return producto;
     }
 
     @Override
-    public void reportarCliente() {
+    public void reportarProducto() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
