@@ -27,8 +27,8 @@ public class MainProducto extends javax.swing.JPanel {
     /**
      * Creates new form MainProducto
      */
-    ProductoDaoI cDao;
-    DefaultTableModel modelo;
+    ProductoDaoI xDao;
+    DefaultTableModel model;
     MsgBox  msg;
     TableRowSorter<TableModel> trsfiltro;
 
@@ -41,34 +41,34 @@ public class MainProducto extends javax.swing.JPanel {
     }
 
     private void ListarProductos() {
-        cDao = new ProductoDao();
-        List<ProductoTO> listarProductos = cDao.listarProductos();
+        xDao = new ProductoDao();
+        List<ProductoTO> listarPruductos = xDao.listarProductos();
         jTable2.setAutoCreateRowSorter(true);
-        modelo = (DefaultTableModel) jTable2.getModel();
-        Object[] ob = new Object[7];
-        for (int i = 0; i < listarProductos.size(); i++) {
+        model = (DefaultTableModel) jTable2.getModel();
+        Object[] ob = new Object[8];
+        for (int i = 0; i < listarPruductos.size(); i++) {
             ob[0] = i + 1;
-            ob[1] = listarProductos.get(i).getId_producto();
-            ob[2] = listarProductos.get(i).getNombre();
-            ob[3] = listarProductos.get(i).getPu();
-            ob[4] = listarProductos.get(i).getUtilidad();
-            ob[5] = listarProductos.get(i).getStock();
-            ob[6] = listarProductos.get(i).getId_categoria();
-            ob[7] = listarProductos.get(i).getId_marca();
-            modelo.addRow(ob);
+            ob[1] = listarPruductos.get(i).getId_producto();
+            ob[2] = listarPruductos.get(i).getNombre();
+            ob[3] = listarPruductos.get(i).getPu();
+            ob[4] = listarPruductos.get(i).getUtilidad();
+            ob[5] = listarPruductos.get(i).getStock();
+            ob[6] = listarPruductos.get(i).getId_categoria();
+            ob[7] = listarPruductos.get(i).getId_marca();
+            model.addRow(ob);
         }
-        jTable2.setModel(modelo);
+        jTable2.setModel(model);
     }
 
     private void paintForm() {
         if (jTable2.getSelectedRow() != -1) {
-            modelo = (DefaultTableModel) jTable2.getModel();
+            model = (DefaultTableModel) jTable2.getModel();
             int rowx = jTable2.getSelectedRow();
             Object valor = jTable2.getValueAt(rowx, 1);
             //ClienteTO filax = (ClienteTO) 
-            cDao = new ProductoDao();
+            xDao = new ProductoDao();
             ProductoTO d
-                    = cDao.buscarProductos(valor.toString());
+                    = xDao.buscarProductos(valor.toString());
             txtId_producto.setColumns(d.getId_producto());
             txtNombre.setText(d.getNombre());
             txtPu.setColumns(d.getPu());
@@ -392,7 +392,7 @@ public class MainProducto extends javax.swing.JPanel {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        cDao = new ProductoDao();
+        xDao = new ProductoDao();
         ProductoTO to = new ProductoTO();
         to.setId_producto(txtId_producto.getColumns());
         to.setNombre(txtNombre.getText());
@@ -404,12 +404,12 @@ public class MainProducto extends javax.swing.JPanel {
         int fila = jTable2.getSelectedRow();
         if (fila != -1) {
             try {
-                int resultado = cDao.update(to);
+                int resultado = xDao.update(to);
                 if (resultado != 0) {
-                    modelo = (DefaultTableModel) jTable2.getModel();
+                    model = (DefaultTableModel) jTable2.getModel();
                     Object nuevo[] = {fila + 1, to.getId_producto(), to.getNombre(), to.getPu(), to.getUtilidad(), to.getStock(), to.getId_categoria(), to.getId_marca()};
-                    modelo.removeRow(fila);
-                    modelo.insertRow(fila, nuevo);
+                    model.removeRow(fila);
+                    model.insertRow(fila, nuevo);
                     resetForm();
                     JOptionPane.showMessageDialog(this, "Se registro");
                 }
@@ -418,10 +418,10 @@ public class MainProducto extends javax.swing.JPanel {
             }
         } else {
             try {
-                if (cDao.create(to) != 0) {
-                    modelo = (DefaultTableModel) jTable2.getModel();
-                    Object nuevo[] = {modelo.getRowCount() + 1, to.getId_producto(), to.getNombre(), to.getPu(), to.getUtilidad(), to.getStock(), to.getId_categoria(), to.getId_marca()};
-                    modelo.addRow(nuevo);
+                if (xDao.create(to) != 0) {
+                    model = (DefaultTableModel) jTable2.getModel();
+                    Object nuevo[] = {model.getRowCount() + 1, to.getId_producto(), to.getNombre(), to.getPu(), to.getUtilidad(), to.getStock(), to.getId_categoria(), to.getId_marca()};
+                    model.addRow(nuevo);
                     resetForm();
                     JOptionPane.showMessageDialog(this, "Se registro");
                 }
@@ -433,18 +433,18 @@ public class MainProducto extends javax.swing.JPanel {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        cDao = new ProductoDao();
+        xDao = new ProductoDao();
         if (jTable2.getSelectedRowCount() > 0) {
             try {
-                modelo = (DefaultTableModel) jTable2.getModel();
+                model = (DefaultTableModel) jTable2.getModel();
                 int rowx = jTable2.getSelectedRow();
                 Object valor = jTable2.getValueAt(rowx, 1);
 
                  msg = new MsgBox();
                 if (msg.showConfirmCustom("Esta seguro de eliminar este registrtro DNI: "
                         + valor + "?", "Mensaje de Confirmación", "") == 0) {
-                    modelo.removeRow(rowx);
-                    cDao.delete(valor.toString());
+                    model.removeRow(rowx);
+                    xDao.delete(valor.toString());
                     resetForm();
                 }
 
