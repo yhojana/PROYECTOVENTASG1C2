@@ -101,8 +101,8 @@ public class GUIMain extends JFrame {
             }
             if (e.getSource() == jmI3) {
                 jtpane.removeAll();
-                MainProducto mc = new MainProducto();
-                jtpane.add("Producto", mc);
+                MainProducto mp = new MainProducto();
+                jtpane.add("Producto", mp);
                 contai.add(BorderLayout.CENTER, jtpane);
                 contai.invalidate();
                 contai.validate();
