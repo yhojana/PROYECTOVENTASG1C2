@@ -39,16 +39,19 @@ public class ProductoDao implements ProductoDaoI {
     @Override
     public int create(ProductoTO d) {
         int rsId = 0;
-        String[] returns = {"URL"};
-        String sql = "INSERT INTO producto(URL, nombrers, precio, estado) "
-                + "VALUES(?,?,?)";
+        String[] returns = {"id_producto"};
+        String sql = "INSERT INTO producto(id_producto, nombre, pu, utilidad, stock, id_categoria, id_marca) "
+                + "VALUES(?,?,?,?,?,?,?)";
         int i = 0;
         try {
             ps = connection.prepareStatement(sql, returns);
-            ps.setString(++i, d.getURL());
-            ps.setString(++i, d.getNombrers());
-            ps.setString(++i, d.getPrecio());
-            ps.setString(++i, d.getEstado());
+            ps.setInt(++i, d.getId_producto());
+            ps.setString(++i, d.getNombre());
+            ps.setInt(++i, d.getPu());
+            ps.setInt(++i, d.getUtilidad());
+            ps.setInt(++i, d.getStock());
+            ps.setInt(++i, d.getId_categoria());
+            ps.setString(++i, d.getId_marca());
             rsId = ps.executeUpdate();// 0 no o 1 si commit
             try ( ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -65,20 +68,26 @@ public class ProductoDao implements ProductoDaoI {
 
     @Override
     public int update(ProductoTO d) {
-        System.out.println("actualizar d.getURL: " + d.getURL());
+        System.out.println("actualizar d.getId_producto: " + d.getId_producto());
         int comit = 0;
         String sql = "UPDATE producto SET "
-                + "nombrers=?, "
-                + "precio=?, "
-                + "estado=? "
-                + "WHERE URL=?";
+                + "nombrer=?, "
+                + "pu=?, "
+                + "utilidad=? "
+                + "stock=? "
+                + "id_categoria=? "
+                + "id_marca=? "
+                + "WHERE id_producto=?";
         int i = 0;
         try {
             ps = connection.prepareStatement(sql);
-            ps.setString(++i, d.getNombrers());
-            ps.setString(++i, d.getPrecio());
-            ps.setString(++i, d.getEstado());
-            ps.setString(++i, d.getURL());
+            ps.setString(++i, d.getNombre());
+            ps.setInt(++i, d.getPu());
+            ps.setInt(++i, d.getUtilidad());
+            ps.setInt(++i, d.getStock());
+            ps.setInt(++i, d.getId_categoria());
+            ps.setString(++i, d.getId_marca());
+            ps.setInt(++i, d.getId_producto());
             comit = ps.executeUpdate();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "update", ex);
@@ -89,7 +98,7 @@ public class ProductoDao implements ProductoDaoI {
     @Override
     public int delete(String id) throws Exception {
         int comit = 0;
-        String sql = "DELETE FROM producto WHERE URL = ?";
+        String sql = "DELETE FROM producto WHERE id_producto = ?";
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, id);
@@ -113,17 +122,20 @@ public class ProductoDao implements ProductoDaoI {
     @Override
     public List listarProductos() {
         List<ProductoTO> listarproductos = new ArrayList();
-        String sql = "SELECT * FROM cliente";
+        String sql = "SELECT * FROM producto";
         try {
             connection = new Conn().connectSQLite();
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
                 ProductoTO cli = new ProductoTO();
-                cli.setURL(rs.getString("url"));
-                cli.setNombrers(rs.getString("nombrers"));
-                cli.setPrecio(rs.getString("precio"));
-                cli.setEstado(rs.getString("estado"));
+                cli.setId_producto(rs.getInt("id_producto"));
+                cli.setNombre(rs.getString("nombrer"));
+                cli.setPu(rs.getInt("pu"));
+                cli.setUtilidad(rs.getInt("utilidad"));
+                cli.setStock(rs.getInt("stock"));
+                cli.setId_categoria(rs.getInt("id_categoria"));
+                cli.setId_marca(rs.getString("id_marca"));
                 listarproductos.add(cli);
             }
         } catch (SQLException e) {
@@ -133,19 +145,22 @@ public class ProductoDao implements ProductoDaoI {
     }
 
     @Override
-    public ProductoTO buscarProductos(String URL) {
+    public ProductoTO buscarProductos(String id_producto) {
         ProductoTO producto = new ProductoTO();
-        String sql = "SELECT * FROM producto WHERE url = ?";
+        String sql = "SELECT * FROM producto WHERE id_producto = ?";
         try {
             connection = new Conn().connectSQLite();
             ps = connection.prepareStatement(sql);
-            ps.setString(1, URL);
+            ps.setString(1, id_producto);
             rs = ps.executeQuery();
             if (rs.next()) {
-                producto.setURL(rs.getString("url"));
-                producto.setNombrers(rs.getString("nombrers"));
-                producto.setPrecio(rs.getString("precio"));
-                producto.setEstado(rs.getString("estado"));
+                producto.setId_producto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombrer"));
+                producto.setPu(rs.getInt("pu"));
+                producto.setUtilidad(rs.getInt("utilidad"));
+                producto.setStock(rs.getInt("stock"));
+                producto.setId_categoria(rs.getInt("id_categoria"));
+                producto.setId_marca(rs.getString("id_marca"));
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -158,4 +173,5 @@ public class ProductoDao implements ProductoDaoI {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    
 }
