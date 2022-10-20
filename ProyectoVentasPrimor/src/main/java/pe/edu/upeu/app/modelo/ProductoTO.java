@@ -12,6 +12,7 @@ import lombok.Data;
  */
 @Data
 public class ProductoTO {
-    String URL, nombrers, precio, estado;
+    String nombre, id_marca;
+    int id_producto, id_categoria, pu, utilidad, stock;
     
 }
