@@ -37,7 +37,7 @@ public class ProductoDao implements ProductoDaoI {
     }
 
     @Override
-    public int create(ProductoTO d) {
+    public int create(ProductoTO c) {
         int rsId = 0;
         String[] returns = {"id_producto"};
         String sql = "INSERT INTO producto(id_producto, nombre, pu, utilidad, stock, id_categoria, id_marca) "
@@ -45,13 +45,13 @@ public class ProductoDao implements ProductoDaoI {
         int i = 0;
         try {
             ps = connection.prepareStatement(sql, returns);
-            ps.setInt(++i, d.getId_producto());
-            ps.setString(++i, d.getNombre());
-            ps.setInt(++i, d.getPu());
-            ps.setInt(++i, d.getUtilidad());
-            ps.setInt(++i, d.getStock());
-            ps.setInt(++i, d.getId_categoria());
-            ps.setString(++i, d.getId_marca());
+            ps.setInt(++i, c.getId_producto());
+            ps.setString(++i, c.getNombre());
+            ps.setInt(++i, c.getPu());
+            ps.setInt(++i, c.getUtilidad());
+            ps.setInt(++i, c.getStock());
+            ps.setInt(++i, c.getId_categoria());
+            ps.setString(++i, c.getId_marca());
             rsId = ps.executeUpdate();// 0 no o 1 si commit
             try ( ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -67,11 +67,11 @@ public class ProductoDao implements ProductoDaoI {
     }
 
     @Override
-    public int update(ProductoTO d) {
-        System.out.println("actualizar d.getId_producto: " + d.getId_producto());
+    public int update(ProductoTO c) {
+        System.out.println("actualizar c.getId_producto: " + c.getId_producto());
         int comit = 0;
         String sql = "UPDATE producto SET "
-                + "nombrer=?, "
+                + "nombre=?, "
                 + "pu=?, "
                 + "utilidad=? "
                 + "stock=? "
@@ -81,13 +81,13 @@ public class ProductoDao implements ProductoDaoI {
         int i = 0;
         try {
             ps = connection.prepareStatement(sql);
-            ps.setString(++i, d.getNombre());
-            ps.setInt(++i, d.getPu());
-            ps.setInt(++i, d.getUtilidad());
-            ps.setInt(++i, d.getStock());
-            ps.setInt(++i, d.getId_categoria());
-            ps.setString(++i, d.getId_marca());
-            ps.setInt(++i, d.getId_producto());
+            ps.setString(++i, c.getNombre());
+            ps.setInt(++i, c.getPu());
+            ps.setInt(++i, c.getUtilidad());
+            ps.setInt(++i, c.getStock());
+            ps.setInt(++i, c.getId_categoria());
+            ps.setString(++i, c.getId_marca());
+            ps.setInt(++i, c.getId_producto());
             comit = ps.executeUpdate();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "update", ex);
