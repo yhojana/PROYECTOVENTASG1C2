@@ -7,33 +7,93 @@ package pe.edu.upeu.app.gui;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import pe.edu.upeu.app.dao.ProductoDao;
 import pe.edu.upeu.app.dao.ProductoDaoI;
 import pe.edu.upeu.app.modelo.ProductoTO;
+import pe.edu.upeu.app.util.MsgBox;
 
 /**
  *
  * @author Usuario
  */
-
+enum ESTADOPRXODUCTO {
+    Chanel, CalvinKlein, Dior, Gucci
+};
 
 public class MainProducto extends javax.swing.JPanel {
 
     /**
      * Creates new form MainProducto
      */
-    
+    ProductoDaoI cDao;
+    DefaultTableModel modelo;
+    MsgBox  msg;
+    TableRowSorter<TableModel> trsfiltro;
 
     public MainProducto() {
-       
+        initComponents();
+        ListarProductos();
+        for (ESTADOPRXODUCTO item : ESTADOPRXODUCTO.values()) {
+            cbxId_marca.addItem(item.toString());
+        }
     }
 
-    
+    private void ListarProductos() {
+        cDao = new ProductoDao();
+        List<ProductoTO> listarProductos = cDao.listarProductos();
+        jTable2.setAutoCreateRowSorter(true);
+        modelo = (DefaultTableModel) jTable2.getModel();
+        Object[] ob = new Object[7];
+        for (int i = 0; i < listarProductos.size(); i++) {
+            ob[0] = i + 1;
+            ob[1] = listarProductos.get(i).getId_producto();
+            ob[2] = listarProductos.get(i).getNombre();
+            ob[3] = listarProductos.get(i).getPu();
+            ob[4] = listarProductos.get(i).getUtilidad();
+            ob[5] = listarProductos.get(i).getStock();
+            ob[6] = listarProductos.get(i).getId_categoria();
+            ob[7] = listarProductos.get(i).getId_marca();
+            modelo.addRow(ob);
+        }
+        jTable2.setModel(modelo);
+    }
 
-  
-
-   
-
+    private void paintForm() {
+        if (jTable2.getSelectedRow() != -1) {
+            modelo = (DefaultTableModel) jTable2.getModel();
+            int rowx = jTable2.getSelectedRow();
+            Object valor = jTable2.getValueAt(rowx, 1);
+            //ClienteTO filax = (ClienteTO) 
+            cDao = new ProductoDao();
+            ProductoTO d
+                    = cDao.buscarProductos(valor.toString());
+            txtId_producto.setColumns(d.getId_producto());
+            txtNombre.setText(d.getNombre());
+            txtPu.setColumns(d.getPu());
+            txtUtilidad.setColumns(d.getUtilidad());
+            txtStock.setColumns(d.getStock());
+            txtId_categoria.setColumns(d.getId_categoria());
+            cbxId_marca.setSelectedItem(d.getId_marca());
+            txtId_producto.setEditable(false);
+            btnRegistrar.setText("MODIFICAR");
+            //guardarButton.setToolTipText("MODIFICAR");
+        } else {
+            txtId_producto.setEditable(true);
+        }
+    }
+    public void resetForm() {
+        txtId_producto.setText("");
+        txtNombre.setText("");
+        txtPu.setText("");
+        txtUtilidad.setText("");
+        txtStock.setText("");
+        txtId_categoria.setText("");
+        
+        cbxId_marca.setSelectedIndex(0);
+        txtId_producto.requestFocus();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,7 +127,7 @@ public class MainProducto extends javax.swing.JPanel {
         txtUtilidad = new javax.swing.JTextField();
         txtStock = new javax.swing.JTextField();
         txtId_categoria = new javax.swing.JTextField();
-        txtId_marca = new javax.swing.JTextField();
+        cbxId_marca = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -131,10 +191,25 @@ public class MainProducto extends javax.swing.JPanel {
         jPanel5.setBackground(new java.awt.Color(102, 102, 255));
 
         btnNuevo.setText("NUEVO");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
 
         btnRegistrar.setText("REGISTRAR");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -174,6 +249,8 @@ public class MainProducto extends javax.swing.JPanel {
 
         jLabel8.setText("Id_marca");
 
+        cbxId_marca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccionar" }));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -201,10 +278,9 @@ public class MainProducto extends javax.swing.JPanel {
                         .addComponent(txtStock, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                         .addComponent(txtUtilidad, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                         .addComponent(txtPu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txtId_marca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                        .addComponent(txtId_categoria, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(txtId_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtId_categoria, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtId_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxId_marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -240,8 +316,8 @@ public class MainProducto extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(txtId_marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbxId_marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 255));
@@ -254,19 +330,22 @@ public class MainProducto extends javax.swing.JPanel {
                 "#", "Id_producto", "Nombre", "Pu", "Utilidad", "Stock", "Id_categoria", "Id_marca"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -308,14 +387,94 @@ public class MainProducto extends javax.swing.JPanel {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+        cDao = new ProductoDao();
+        ProductoTO to = new ProductoTO();
+        to.setId_producto(txtId_producto.getColumns());
+        to.setNombre(txtNombre.getText());
+        to.setPu(txtPu.getColumns());
+        to.setUtilidad(txtUtilidad.getColumns());
+        to.setStock(txtStock.getColumns());
+        to.setId_categoria(txtId_categoria.getColumns());
+        to.setId_marca(cbxId_marca.getSelectedItem().toString());
+        int fila = jTable2.getSelectedRow();
+        if (fila != -1) {
+            try {
+                int resultado = cDao.update(to);
+                if (resultado != 0) {
+                    modelo = (DefaultTableModel) jTable2.getModel();
+                    Object nuevo[] = {fila + 1, to.getId_producto(), to.getNombre(), to.getPu(), to.getUtilidad(), to.getStock(), to.getId_categoria(), to.getId_marca()};
+                    modelo.removeRow(fila);
+                    modelo.insertRow(fila, nuevo);
+                    resetForm();
+                    JOptionPane.showMessageDialog(this, "Se registro");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        } else {
+            try {
+                if (cDao.create(to) != 0) {
+                    modelo = (DefaultTableModel) jTable2.getModel();
+                    Object nuevo[] = {modelo.getRowCount() + 1, to.getId_producto(), to.getNombre(), to.getPu(), to.getUtilidad(), to.getStock(), to.getId_categoria(), to.getId_marca()};
+                    modelo.addRow(nuevo);
+                    resetForm();
+                    JOptionPane.showMessageDialog(this, "Se registro");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        cDao = new ProductoDao();
+        if (jTable2.getSelectedRowCount() > 0) {
+            try {
+                modelo = (DefaultTableModel) jTable2.getModel();
+                int rowx = jTable2.getSelectedRow();
+                Object valor = jTable2.getValueAt(rowx, 1);
+
+                 msg = new MsgBox();
+                if (msg.showConfirmCustom("Esta seguro de eliminar este registrtro DNI: "
+                        + valor + "?", "Mensaje de Confirmación", "") == 0) {
+                    modelo.removeRow(rowx);
+                    cDao.delete(valor.toString());
+                    resetForm();
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un item");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        paintForm();
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        // TODO add your handling code here:
+        resetForm();
+        btnRegistrar.setText("REGISTRAR");
+        txtId_producto.setEditable(true);
+        jTable2.getSelectionModel().clearSelection();
+    }//GEN-LAST:event_btnNuevoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JComboBox<String> cbxId_marca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -335,7 +494,6 @@ public class MainProducto extends javax.swing.JPanel {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField txtId_categoria;
-    private javax.swing.JTextField txtId_marca;
     private javax.swing.JTextField txtId_producto;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPu;
