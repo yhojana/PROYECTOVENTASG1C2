@@ -67,7 +67,7 @@ public class MainCliente extends javax.swing.JPanel {
             txtNombre.setText(d.getNombrers());
             cbxTipo.setSelectedItem(d.getTipo());
             txtDni.setEditable(false);
-            btnRegistrar.setText("CAMBIAR");
+            btnRegistrar.setText("MODIFICAR");
             //guardarButton.setToolTipText("MODIFICAR");
         } else {
             txtDni.setEditable(true);
