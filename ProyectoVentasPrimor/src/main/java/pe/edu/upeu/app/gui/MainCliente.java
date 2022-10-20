@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import pe.edu.upeu.app.dao.ClienteDao;
 import pe.edu.upeu.app.dao.ClienteDaoI;
 import pe.edu.upeu.app.modelo.ClienteTO;
+import pe.edu.upeu.app.util.MsgBox;
 
 /**
  *
@@ -26,6 +27,7 @@ public class MainCliente extends javax.swing.JPanel {
      */
     ClienteDaoI cDao;
     DefaultTableModel modelo;
+    MsgBox  msg;
 
     public MainCliente() {
         initComponents();
@@ -65,7 +67,7 @@ public class MainCliente extends javax.swing.JPanel {
             txtNombre.setText(d.getNombrers());
             cbxTipo.setSelectedItem(d.getTipo());
             txtDni.setEditable(false);
-            btnRegistrar.setText("MODIFICAR");
+            btnRegistrar.setText("CAMBIAR");
             //guardarButton.setToolTipText("MODIFICAR");
         } else {
             txtDni.setEditable(true);
@@ -101,6 +103,7 @@ public class MainCliente extends javax.swing.JPanel {
         txtDni = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         cbxTipo = new javax.swing.JComboBox<>();
+        fondoPanel1 = new pe.edu.upeu.app.component.FondoPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -158,12 +161,29 @@ public class MainCliente extends javax.swing.JPanel {
 
         jLabel4.setText("Tipo:");
 
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
+
         cbxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         cbxTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxTipoActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout fondoPanel1Layout = new javax.swing.GroupLayout(fondoPanel1);
+        fondoPanel1.setLayout(fondoPanel1Layout);
+        fondoPanel1Layout.setHorizontalGroup(
+            fondoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 178, Short.MAX_VALUE)
+        );
+        fondoPanel1Layout.setVerticalGroup(
+            fondoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 128, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -189,6 +209,10 @@ public class MainCliente extends javax.swing.JPanel {
                             .addComponent(cbxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(fondoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,7 +234,9 @@ public class MainCliente extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cbxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fondoPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(25, 25, 25))
         );
 
         jPanel4.setBackground(new java.awt.Color(102, 255, 204));
@@ -229,6 +255,11 @@ public class MainCliente extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setMinWidth(0);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(200);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -324,10 +355,16 @@ public class MainCliente extends javax.swing.JPanel {
                 modelo = (DefaultTableModel) jTable1.getModel();
                 int rowx = jTable1.getSelectedRow();
                 Object valor = jTable1.getValueAt(rowx, 1);
-                JOptionPane.showMessageDialog(this, valor);
-                modelo.removeRow(rowx);
+                
+               msg = new MsgBox();
+if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor + "?", "Mensaje de Confirmación", "") == 0) {
+ modelo.removeRow(rowx);
                 cDao.delete(valor.toString());
                 resetForm();
+}
+
+               
+                
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
@@ -349,15 +386,23 @@ public class MainCliente extends javax.swing.JPanel {
         jTable1.getSelectionModel().clearSelection();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
+
     private void cbxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxTipoActionPerformed
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JComboBox<String> cbxTipo;
+    private pe.edu.upeu.app.component.FondoPanel fondoPanel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
