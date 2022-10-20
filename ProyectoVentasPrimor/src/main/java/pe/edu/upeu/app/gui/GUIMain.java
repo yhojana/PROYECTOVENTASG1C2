@@ -24,6 +24,7 @@ public class GUIMain extends JFrame {
     JMenu menu1;
     JMenuItem jmI1;
     JMenuItem jmI2;
+    JMenuItem jmI3;
     JTabbedPane jtpane;
     JPanel jp;
     JScrollPane scrollPane;
@@ -37,8 +38,10 @@ public class GUIMain extends JFrame {
         jmI1 = new JMenuItem("Abrir");
         menuBar.add(menu1);
         jmI2 = new JMenuItem("Adm. Cliente");
+        jmI3 = new JMenuItem("Adm. Producto");
         menu1.add(jmI1);
         menu1.add(jmI2);
+        menu1.add(jmI3);
         menu1 = new JMenu("Ver");
         menuBar.add(menu1);
         this.add(menuBar);
@@ -47,6 +50,7 @@ public class GUIMain extends JFrame {
         MenuItemListener menuItemListener = new MenuItemListener();
         jmI1.addActionListener(menuItemListener);//accion
         jmI2.addActionListener(menuItemListener);
+        jmI3.addActionListener(menuItemListener);
         jtpane = new JTabbedPane();
         this.getContentPane().add(BorderLayout.NORTH, menuBar);
 //this.getContentPane().add(BorderLayout.CENTER, jtpane);
@@ -87,9 +91,18 @@ public class GUIMain extends JFrame {
             }
 
             if (e.getSource() == jmI2) {
-                jtpane.removeAll();                
+                jtpane.removeAll();
                 MainCliente mc = new MainCliente();
                 jtpane.add("Cliente", mc);
+                contai.add(BorderLayout.CENTER, jtpane);
+                contai.invalidate();
+                contai.validate();
+                contai.repaint();
+            }
+            if (e.getSource() == jmI3) {
+                jtpane.removeAll();
+                MainProducto mc = new MainProducto();
+                jtpane.add("Producto", mc);
                 contai.add(BorderLayout.CENTER, jtpane);
                 contai.invalidate();
                 contai.validate();
