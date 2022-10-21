@@ -24,20 +24,20 @@ import pe.edu.upeu.app.util.ErrorLogger;
 public class ProductoDao implements ProductoDaoI {
 
     Statement stmt = null;
-    Vector columnNames;
-    Vector visitdata;
+    Vector columnName;
+    Vector visitdatax;
     Connection connection = Conn.connectSQLite();
     static PreparedStatement ps;
     static ErrorLogger log = new ErrorLogger(ProductoDao.class.getName());
     ResultSet rs = null;
 
     public ProductoDao() {
-        columnNames = new Vector();
-        visitdata = new Vector();
+        columnName = new Vector();
+        visitdatax = new Vector();
     }
 
     @Override
-    public int create(ProductoTO c) {
+    public int create(ProductoTO d) {
         int rsId = 0;
         String[] returns = {"id_producto"};
         String sql = "INSERT INTO producto(id_producto, nombre, pu, utilidad, stock, id_categoria, id_marca) "
@@ -45,13 +45,13 @@ public class ProductoDao implements ProductoDaoI {
         int i = 0;
         try {
             ps = connection.prepareStatement(sql, returns);
-            ps.setInt(++i, c.getId_producto());
-            ps.setString(++i, c.getNombre());
-            ps.setInt(++i, c.getPu());
-            ps.setInt(++i, c.getUtilidad());
-            ps.setInt(++i, c.getStock());
-            ps.setInt(++i, c.getId_categoria());
-            ps.setString(++i, c.getId_marca());
+            ps.setString(++i, d.getId_producto());
+            ps.setString(++i, d.getNombre());
+            ps.setString(++i, d.getPu());
+            ps.setString(++i, d.getUtilidad());
+            ps.setString(++i, d.getStock());
+            ps.setString(++i, d.getId_categoria());
+            ps.setString(++i, d.getId_marca());
             rsId = ps.executeUpdate();// 0 no o 1 si commit
             try ( ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -82,12 +82,12 @@ public class ProductoDao implements ProductoDaoI {
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(++i, c.getNombre());
-            ps.setInt(++i, c.getPu());
-            ps.setInt(++i, c.getUtilidad());
-            ps.setInt(++i, c.getStock());
-            ps.setInt(++i, c.getId_categoria());
+            ps.setString(++i, c.getPu());
+            ps.setString(++i, c.getUtilidad());
+            ps.setString(++i, c.getStock());
+            ps.setString(++i, c.getId_categoria());
             ps.setString(++i, c.getId_marca());
-            ps.setInt(++i, c.getId_producto());
+            ps.setString(++i, c.getId_producto());
             comit = ps.executeUpdate();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "update", ex);
@@ -129,12 +129,12 @@ public class ProductoDao implements ProductoDaoI {
             rs = ps.executeQuery();
             while (rs.next()) {
                 ProductoTO cli = new ProductoTO();
-                cli.setId_producto(rs.getInt("id_producto"));
+                cli.setId_producto(rs.getString("id_producto"));
                 cli.setNombre(rs.getString("nombrer"));
-                cli.setPu(rs.getInt("pu"));
-                cli.setUtilidad(rs.getInt("utilidad"));
-                cli.setStock(rs.getInt("stock"));
-                cli.setId_categoria(rs.getInt("id_categoria"));
+                cli.setPu(rs.getString("pu"));
+                cli.setUtilidad(rs.getString("utilidad"));
+                cli.setStock(rs.getString("stock"));
+                cli.setId_categoria(rs.getString("id_categoria"));
                 cli.setId_marca(rs.getString("id_marca"));
                 listarproductos.add(cli);
             }
@@ -154,12 +154,12 @@ public class ProductoDao implements ProductoDaoI {
             ps.setString(1, id_producto);
             rs = ps.executeQuery();
             if (rs.next()) {
-                producto.setId_producto(rs.getInt("id_producto"));
+                producto.setId_producto(rs.getString("id_producto"));
                 producto.setNombre(rs.getString("nombrer"));
-                producto.setPu(rs.getInt("pu"));
-                producto.setUtilidad(rs.getInt("utilidad"));
-                producto.setStock(rs.getInt("stock"));
-                producto.setId_categoria(rs.getInt("id_categoria"));
+                producto.setPu(rs.getString("pu"));
+                producto.setUtilidad(rs.getString("utilidad"));
+                producto.setStock(rs.getString("stock"));
+                producto.setId_categoria(rs.getString("id_categoria"));
                 producto.setId_marca(rs.getString("id_marca"));
             }
         } catch (SQLException e) {
