@@ -79,7 +79,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>pe.edu.upeu.app.ProyectoVentasG3</mainClass>
+                            <mainClass>pe.edu.upeu.app.ProyectoVentasPrimorG1C2</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

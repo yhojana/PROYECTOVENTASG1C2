@@ -69,12 +69,12 @@ public class MainProducto extends javax.swing.JPanel {
             xDao = new ProductoDao();
             ProductoTO d
                     = xDao.buscarProductos(valor.toString());
-            txtId_producto.setColumns(d.getId_producto());
+            txtId_producto.setText(d.getId_producto());
             txtNombre.setText(d.getNombre());
-            txtPu.setColumns(d.getPu());
-            txtUtilidad.setColumns(d.getUtilidad());
-            txtStock.setColumns(d.getStock());
-            txtId_categoria.setColumns(d.getId_categoria());
+            txtPu.setText(d.getPu());
+            txtUtilidad.setText(d.getUtilidad());
+            txtStock.setText(d.getStock());
+            txtId_categoria.setText(d.getId_categoria());
             cbxId_marca.setSelectedItem(d.getId_marca());
             txtId_producto.setEditable(false);
             btnRegistrar.setText("MODIFICAR");
@@ -394,12 +394,12 @@ public class MainProducto extends javax.swing.JPanel {
         // TODO add your handling code here:
         xDao = new ProductoDao();
         ProductoTO to = new ProductoTO();
-        to.setId_producto(txtId_producto.getColumns());
+        to.setId_producto(txtId_producto.getText());
         to.setNombre(txtNombre.getText());
-        to.setPu(txtPu.getColumns());
-        to.setUtilidad(txtUtilidad.getColumns());
-        to.setStock(txtStock.getColumns());
-        to.setId_categoria(txtId_categoria.getColumns());
+        to.setPu(txtPu.getText());
+        to.setUtilidad(txtUtilidad.getText());
+        to.setStock(txtStock.getText());
+        to.setId_categoria(txtId_categoria.getText());
         to.setId_marca(cbxId_marca.getSelectedItem().toString());
         int fila = jTable2.getSelectedRow();
         if (fila != -1) {

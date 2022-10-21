@@ -27,7 +27,7 @@ public class MainCliente extends javax.swing.JPanel {
      */
     ClienteDaoI cDao;
     DefaultTableModel modelo;
-    MsgBox  msg;
+    MsgBox msg;
 
     public MainCliente() {
         initComponents();
@@ -355,16 +355,14 @@ public class MainCliente extends javax.swing.JPanel {
                 modelo = (DefaultTableModel) jTable1.getModel();
                 int rowx = jTable1.getSelectedRow();
                 Object valor = jTable1.getValueAt(rowx, 1);
-                
-               msg = new MsgBox();
-if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor + "?", "Mensaje de Confirmación", "") == 0) {
- modelo.removeRow(rowx);
-                cDao.delete(valor.toString());
-                resetForm();
-}
 
-               
-                
+                msg = new MsgBox();
+                if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDni: " + valor + "?", "Mensaje de Confirmación", "") == 0) {
+                    modelo.removeRow(rowx);
+                    cDao.delete(valor.toString());
+                    resetForm();
+                }
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
@@ -394,7 +392,6 @@ if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

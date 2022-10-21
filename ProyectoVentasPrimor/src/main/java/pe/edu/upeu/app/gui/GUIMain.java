@@ -36,15 +36,16 @@ public class GUIMain extends JFrame {
         menuBar = new JMenuBar();
         menu1 = new JMenu("Archivo");
         jmI1 = new JMenuItem("Abrir");
-        menuBar.add(menu1);
+        
         jmI2 = new JMenuItem("Adm. Cliente");
         jmI3 = new JMenuItem("Adm. Producto");
         menu1.add(jmI1);
         menu1.add(jmI2);
         menu1.add(jmI3);
+        menuBar.add(menu1);
         menu1 = new JMenu("Ver");
         menuBar.add(menu1);
-        this.add(menuBar);
+        //this.add(menuBar);
 
         //Accion de abbrir JTabbedPane
         MenuItemListener menuItemListener = new MenuItemListener();
@@ -63,9 +64,10 @@ public class GUIMain extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("pasa por aqui");
+            jtpane.removeAll();
             Container contai = GUIMain.this.getContentPane();
             if (e.getSource() == jmI1) {
-                jtpane.removeAll();
+                
                 jp = new JPanel();
                 jtpane.add("Prueba", jp);
                 jp = new JPanel();
@@ -91,7 +93,7 @@ public class GUIMain extends JFrame {
             }
 
             if (e.getSource() == jmI2) {
-                jtpane.removeAll();
+                //jtpane.removeAll();
                 MainCliente mc = new MainCliente();
                 jtpane.add("Cliente", mc);
                 contai.add(BorderLayout.CENTER, jtpane);
@@ -100,7 +102,7 @@ public class GUIMain extends JFrame {
                 contai.repaint();
             }
             if (e.getSource() == jmI3) {
-                jtpane.removeAll();
+                //jtpane.removeAll();
                 MainProducto mp = new MainProducto();
                 jtpane.add("Producto", mp);
                 contai.add(BorderLayout.CENTER, jtpane);

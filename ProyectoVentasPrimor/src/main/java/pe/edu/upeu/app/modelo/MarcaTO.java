@@ -11,7 +11,7 @@ import lombok.Data;
  * @author Usuario
  */
 @Data
-public class ProductoTO {
-    String  id_producto, nombre,  pu, utilidad, stock, id_categoria, id_marca;
-   
+public class MarcaTO {
+    int id_marca;
+    String nombre; 
 }
