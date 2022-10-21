@@ -22,7 +22,7 @@ public interface ProductoDaoI {
 
     public List listarProductos();
 
-    public ProductoTO buscarProductos(String URL);
+    public ProductoTO buscarProductos(String id_producto);
 
     public void reportarProducto();
 }
