@@ -39,7 +39,7 @@ public class Conn {
 
     /*public static void main(String[] args) {
         connectSQLite();
-
+    
         try ( PreparedStatement stmt = connectSQLite().prepareStatement("SELECT * FROM cliente")) {
             ResultSet rs = stmt.executeQuery();
 

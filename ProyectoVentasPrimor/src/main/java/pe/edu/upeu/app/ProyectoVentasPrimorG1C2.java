@@ -13,7 +13,7 @@ import pe.edu.upeu.app.gui.Login;
  *
  * @author LABORATORIO_2
  */
-public class ProyectoVentasG3 {
+public class ProyectoVentasPrimorG1C2 {
 
     public static void main(String[] args) {
         //new MsgBox("Holas", JOptionPane.DEFAULT_OPTION, "");

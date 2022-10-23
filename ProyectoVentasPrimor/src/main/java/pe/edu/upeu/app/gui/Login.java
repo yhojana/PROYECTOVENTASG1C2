@@ -19,8 +19,9 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    UtilsX obj=new UtilsX();
+    UtilsX obj = new UtilsX();
     Image image;
+
     public Login() {
         initComponents();
         this.setTitle("Login SysCenterLife");
@@ -33,7 +34,7 @@ public class Login extends javax.swing.JFrame {
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setResizable(false);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -47,6 +48,7 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -55,9 +57,9 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        txtUsuario = new LIB.JTexfieldPH_FielTex();
+        txtUsuario = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
-        txtclave = new LIB.JTexfieldPH_Password();
+        txtclave = new javax.swing.JPasswordField();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         button1 = new java.awt.Button();
@@ -106,43 +108,27 @@ public class Login extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtUsuario.setBackground(new java.awt.Color(204, 204, 204));
-        txtUsuario.setBorder(null);
-        txtUsuario.setForeground(new java.awt.Color(153, 153, 255));
-        txtUsuario.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        txtUsuario.setPhColor(new java.awt.Color(102, 102, 255));
-        txtUsuario.setPlaceholder("Usuario :)");
-        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsuarioActionPerformed(evt);
-            }
-        });
-        jPanel5.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 50));
+        jPanel5.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 12, 180, 30));
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 240, 50));
 
         jPanel6.setBackground(new java.awt.Color(204, 204, 204));
-
-        txtclave.setBackground(new java.awt.Color(204, 204, 204));
-        txtclave.setBorder(null);
-        txtclave.setForeground(new java.awt.Color(153, 153, 255));
-        txtclave.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        txtclave.setPhColor(new java.awt.Color(153, 153, 255));
-        txtclave.setPlaceholder("Contraseña :)");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtclave, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(txtclave, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtclave, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtclave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, -1));
@@ -208,35 +194,28 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsuarioActionPerformed
-
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
- System.exit(0);        // TODO add your handling code here:
+        System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
         // TODO add your handling code here:
-        
-        
+
         //Accion de Iniciar
-        if(txtUsuario.getText().equals("yhojana")&& txtclave.getText().equals("123456")){
+        if (txtUsuario.getText().equals("yhojana") && txtclave.getText().equals("123456")) {
             System.out.println("Entro Aqui!!");
             GUIMain guiMain = new GUIMain();
             guiMain.setVisible(true);
             this.dispose();
-        }else{
-           
-    }//GEN-LAST:event_button1ActionPerformed
+        }else{ 
          
-           
-        
-    
-}
+        }
+
+    }//GEN-LAST:event_button1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button button1;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -249,7 +228,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private LIB.JTexfieldPH_FielTex txtUsuario;
-    private LIB.JTexfieldPH_Password txtclave;
+    private javax.swing.JTextField txtUsuario;
+    private javax.swing.JPasswordField txtclave;
     // End of variables declaration//GEN-END:variables
 }
