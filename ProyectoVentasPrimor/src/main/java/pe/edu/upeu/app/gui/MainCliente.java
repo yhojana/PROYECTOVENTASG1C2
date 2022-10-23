@@ -27,7 +27,7 @@ public class MainCliente extends javax.swing.JPanel {
      */
     ClienteDaoI cDao;
     DefaultTableModel modelo;
-    MsgBox  msg;
+    MsgBox msg;
 
     public MainCliente() {
         initComponents();
@@ -67,7 +67,7 @@ public class MainCliente extends javax.swing.JPanel {
             txtNombre.setText(d.getNombrers());
             cbxTipo.setSelectedItem(d.getTipo());
             txtDni.setEditable(false);
-            btnRegistrar.setText("CAMBIAR");
+            btnRegistrar.setText("MODIFICAR");
             //guardarButton.setToolTipText("MODIFICAR");
         } else {
             txtDni.setEditable(true);
@@ -97,7 +97,7 @@ public class MainCliente extends javax.swing.JPanel {
         btnNuevo = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jpanel3 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtDni = new javax.swing.JTextField();
@@ -155,7 +155,7 @@ public class MainCliente extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setText("DNI/RUC:");
+        jpanel3.setText("DNI/RUC:");
 
         jLabel3.setText("Nombres:");
 
@@ -168,6 +168,11 @@ public class MainCliente extends javax.swing.JPanel {
         });
 
         cbxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        cbxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxTipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout fondoPanel1Layout = new javax.swing.GroupLayout(fondoPanel1);
         fondoPanel1.setLayout(fondoPanel1Layout);
@@ -188,7 +193,7 @@ public class MainCliente extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNuevo)
-                    .addComponent(jLabel2)
+                    .addComponent(jpanel3)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -219,7 +224,7 @@ public class MainCliente extends javax.swing.JPanel {
                     .addComponent(btnEliminar))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(jpanel3)
                     .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -291,10 +296,9 @@ public class MainCliente extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,16 +355,14 @@ public class MainCliente extends javax.swing.JPanel {
                 modelo = (DefaultTableModel) jTable1.getModel();
                 int rowx = jTable1.getSelectedRow();
                 Object valor = jTable1.getValueAt(rowx, 1);
-                
-               msg = new MsgBox();
-if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor + "?", "Mensaje de Confirmación", "") == 0) {
- modelo.removeRow(rowx);
-                cDao.delete(valor.toString());
-                resetForm();
-}
 
-               
-                
+                msg = new MsgBox();
+                if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDni: " + valor + "?", "Mensaje de Confirmación", "") == 0) {
+                    modelo.removeRow(rowx);
+                    cDao.delete(valor.toString());
+                    resetForm();
+                }
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
@@ -382,6 +384,11 @@ if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor
         jTable1.getSelectionModel().clearSelection();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
+
+    private void cbxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxTipoActionPerformed
+
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
@@ -394,7 +401,6 @@ if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor
     private javax.swing.JComboBox<String> cbxTipo;
     private pe.edu.upeu.app.component.FondoPanel fondoPanel1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
@@ -403,6 +409,7 @@ if (msg.showConfirmCustom("Esta seguro de eliminar este registrtroDNI: " + valor
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jpanel3;
     private javax.swing.JTextField txtDni;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

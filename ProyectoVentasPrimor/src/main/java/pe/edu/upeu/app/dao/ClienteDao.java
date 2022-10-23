@@ -92,7 +92,7 @@ public class ClienteDao implements ClienteDaoI {
             ps.setString(1, id);
             comit = ps.executeUpdate();
         } catch (SQLException ex) {
-            log.log(Level.SEVERE, "delete", ex);
+            log.log(Level.SEVERE, "eliminar", ex);
             // System.err.println("NO del " + ex.toString());
             throw new Exception("Detalle:" + ex.getMessage());
         }

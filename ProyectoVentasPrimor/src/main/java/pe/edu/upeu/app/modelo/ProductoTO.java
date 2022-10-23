@@ -8,10 +8,10 @@ import lombok.Data;
 
 /**
  *
- * @author LABORATORIO_2
+ * @author Usuario
  */
-
 @Data
-public class ClienteTO {
-    String dniruc, nombrers, tipo;
+public class ProductoTO {
+    String  id_producto, nombre,  pu, utilidad, stock, id_categoria, id_marca;
+   
 }
