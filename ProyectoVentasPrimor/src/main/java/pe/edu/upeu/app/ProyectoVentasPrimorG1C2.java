@@ -16,11 +16,9 @@ import pe.edu.upeu.app.gui.Login;
 public class ProyectoVentasPrimorG1C2 {
 
     public static void main(String[] args) {
-        //new MsgBox("Holas", JOptionPane.DEFAULT_OPTION, "");
+        
         new Login().setVisible(true);
-        //new Login().setVisible(true);
-        //Login l=new Login();
-        //l.show();
+        
        
     }
 }

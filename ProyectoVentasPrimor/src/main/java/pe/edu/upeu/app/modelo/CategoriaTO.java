@@ -12,6 +12,6 @@ import lombok.Data;
  */
 @Data
 public class CategoriaTO {
-    String  nombre;
-    int id_categoria;
+    public int idCategoria;
+    public String nombre;
 }

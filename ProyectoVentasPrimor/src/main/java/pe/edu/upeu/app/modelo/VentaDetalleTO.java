@@ -6,14 +6,9 @@ package pe.edu.upeu.app.modelo;
 
 import lombok.Data;
 
-/**
- *
- * @author Usuario
- */
 @Data
-public class ProductoTO {
-    public int idProducto, idMarca, idCategoria;
-    public String nombre;
-    public double pu, utilidad, stock;
-   
+public class VentaDetalleTO {
+    public int idVentaDetalle, idVenta, idProducto;
+    public double pu, cantidad, descuento, subtotal;
+    
 }

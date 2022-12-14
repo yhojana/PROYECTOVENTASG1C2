@@ -12,6 +12,6 @@ import lombok.Data;
  */
 @Data
 public class MarcaTO {
-    int id_marca;
-    String nombre; 
+    public  int idMarca;
+   public String nombre;
 }

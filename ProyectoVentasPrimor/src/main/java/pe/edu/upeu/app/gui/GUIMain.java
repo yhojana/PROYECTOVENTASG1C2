@@ -36,7 +36,7 @@ public class GUIMain extends JFrame {
         menuBar = new JMenuBar();
         menu1 = new JMenu("Archivo");
         jmI1 = new JMenuItem("Abrir");
-        
+
         jmI2 = new JMenuItem("Adm. Cliente");
         jmI3 = new JMenuItem("Adm. Producto");
         menu1.add(jmI1);
@@ -51,7 +51,6 @@ public class GUIMain extends JFrame {
         MenuItemListener menuItemListener = new MenuItemListener();
         jmI1.addActionListener(menuItemListener);//accion
         jmI2.addActionListener(menuItemListener);
-        jmI3.addActionListener(menuItemListener);
         jtpane = new JTabbedPane();
         this.getContentPane().add(BorderLayout.NORTH, menuBar);
 //this.getContentPane().add(BorderLayout.CENTER, jtpane);
@@ -67,7 +66,7 @@ public class GUIMain extends JFrame {
             jtpane.removeAll();
             Container contai = GUIMain.this.getContentPane();
             if (e.getSource() == jmI1) {
-                
+
                 jp = new JPanel();
                 jtpane.add("Prueba", jp);
                 jp = new JPanel();
@@ -95,22 +94,29 @@ public class GUIMain extends JFrame {
             if (e.getSource() == jmI2) {
                 //jtpane.removeAll();
                 MainCliente mc = new MainCliente();
-                jtpane.add("Cliente", mc);
+                //jtpane.add("Cliente", mc);
+                scrollPane = new JScrollPane(mc);
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jtpane.add("Adm. Cliente", scrollPane);
+
+                MainVentas mv = new MainVentas();
+                //jtpane.add("Cliente", mc);
+                scrollPane = new JScrollPane(mv);
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jtpane.add("G. Ventas", scrollPane);
+
+                ReporteVentas rv = new ReporteVentas();
+                jtpane.add("R.Venta", rv);
+
                 contai.add(BorderLayout.CENTER, jtpane);
                 contai.invalidate();
                 contai.validate();
                 contai.repaint();
+
             }
-            if (e.getSource() == jmI3) {
-                //jtpane.removeAll();
-                MainProducto mp = new MainProducto();
-                jtpane.add("Producto", mp);
-                contai.add(BorderLayout.CENTER, jtpane);
-                contai.invalidate();
-                contai.validate();
-                contai.repaint();
-            }
+
         }
     }
-
 }
