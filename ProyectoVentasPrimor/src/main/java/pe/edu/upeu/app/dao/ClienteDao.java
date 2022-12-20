@@ -15,6 +15,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import pe.com.syscenterlife.autocomp.ModeloDataAutocomplet;
 import pe.edu.upeu.app.dao.conx.Conn;
+import pe.edu.upeu.app.dao.conx.ConnS;
 import pe.edu.upeu.app.modelo.ClienteTO;
 import pe.edu.upeu.app.util.ErrorLogger;
 
@@ -27,7 +28,9 @@ public class ClienteDao implements ClienteDaoI {
     Statement stmt = null;
     Vector columnNames;
     Vector visitdata;
-    Connection connection = Conn.connectSQLite();
+    ConnS instance=ConnS.getInstance();
+    Connection connection = instance.getConnection();
+    
     static PreparedStatement ps;
     static ErrorLogger log = new ErrorLogger(ClienteDao.class.getName());
     ResultSet rs = null;

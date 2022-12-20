@@ -43,14 +43,13 @@ public class GUIMain extends JFrame {
         menu1.add(jmI2);
         menu1.add(jmI3);
         menuBar.add(menu1);
-        menu1 = new JMenu("Ver");
-        menuBar.add(menu1);
-        //this.add(menuBar);
+        
 
         //Accion de abbrir JTabbedPane
         MenuItemListener menuItemListener = new MenuItemListener();
         jmI1.addActionListener(menuItemListener);//accion
         jmI2.addActionListener(menuItemListener);
+        jmI3.addActionListener(menuItemListener);
         jtpane = new JTabbedPane();
         this.getContentPane().add(BorderLayout.NORTH, menuBar);
 //this.getContentPane().add(BorderLayout.CENTER, jtpane);
@@ -115,6 +114,20 @@ public class GUIMain extends JFrame {
                 contai.validate();
                 contai.repaint();
 
+            }
+            
+            if(e.getSource() == jmI3) {
+                MainProducto mp = new MainProducto();
+                //jtpane.add("Cliente", mc);
+                scrollPane = new JScrollPane(mp);
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                jtpane.add("Adm. Productos", scrollPane);
+                
+                contai.add(BorderLayout.CENTER, jtpane);
+                contai.invalidate();
+                contai.validate();
+                contai.repaint();
             }
 
         }
