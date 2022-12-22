@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import pe.edu.upeu.app.util.UtilsX;
 
 /**
@@ -208,13 +209,14 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         //Accion de Iniciar
-        if (txtUsuario.getText().equals("yhojana") && txtclave.getText().equals("123456")) {
+         if (txtUsuario.getText().equals("yhojana") && txtclave.getText().equals("123456")) {
             System.out.println("Entro Aqui!!");
             GUIMain guiMain = new GUIMain();
             guiMain.setVisible(true);
             this.dispose();
         }else{ 
-            
+           JOptionPane.showMessageDialog(this, "El usuario o contraseña esta mal");
+
         }
 
     }//GEN-LAST:event_button1ActionPerformed

@@ -39,6 +39,7 @@ import pe.edu.upeu.app.dao.VentaDao;
 import pe.edu.upeu.app.dao.VentaDaoI;
 import pe.edu.upeu.app.dao.conx.ConnS;
 import pe.edu.upeu.app.modelo.CarritoTO;
+import pe.edu.upeu.app.modelo.ClienteTO;
 import pe.edu.upeu.app.modelo.VentaDetalleTO;
 import pe.edu.upeu.app.modelo.VentaTO;
 
@@ -48,38 +49,44 @@ import pe.edu.upeu.app.modelo.VentaTO;
  */
 public class MainVentas extends javax.swing.JPanel {
 
+    ClienteDaoI daoC;
     ProductoDaoI daoP;
-    CarritoDaoI daoC;
-    DefaultTableModel modelo;
+    CarritoDaoI daoCA;
     VentaDaoI daoV;
+    DefaultTableModel modelo;
+    List<ModeloDataAutocomplet> items;
+    List<ModeloDataAutocomplet> itemsP;
 
     public MainVentas() {
         initComponents();
-        ClienteDaoI daoC = new ClienteDao();
-        List<ModeloDataAutocomplet> items = daoC.listAutoComplet("");
-        AutoCompleteTextField.setupAutoComplete(txtDniAutoComplete, items, "ID");//ID,NAME, OTHER   
+        
+        buscarCliente();
 
         txtDniAutoComplete.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if ((e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
                         && AutoCompleteTextField.dataGetReturnet != null) {
+                    //txtAutoCompDNI.setText(AutoCompleteTextField.dataGetReturnet.getIdx());
+                    txtNombreCliente.setText(AutoCompleteTextField.dataGetReturnet.getNombreDysplay());
+                    listarCarrito(txtDniAutoComplete.getText());
+
                     if (ModeloDataAutocomplet.TIPE_DISPLAY.equals("ID") && txtDniAutoComplete.getText().equals(AutoCompleteTextField.dataGetReturnet.getIdx())) {
-                        txtNombre.setText(AutoCompleteTextField.dataGetReturnet.getNombreDysplay());
+                        txtNombreCliente.setText(AutoCompleteTextField.dataGetReturnet.getNombreDysplay());
                     } else if (ModeloDataAutocomplet.TIPE_DISPLAY.equals("NAME")
                             && txtDniAutoComplete.getText().equals(AutoCompleteTextField.dataGetReturnet.getNombreDysplay())) {
-                        txtNombre.setText(AutoCompleteTextField.dataGetReturnet.getIdx());
+                        txtNombreCliente.setText(AutoCompleteTextField.dataGetReturnet.getIdx());
                     } else if (ModeloDataAutocomplet.TIPE_DISPLAY.equals("OTHER")
                             && txtDniAutoComplete.getText().equals(AutoCompleteTextField.dataGetReturnet.getOtherData())) {
                         System.out.println("Valor:" + txtDniAutoComplete.getText());
                         System.out.println("Valor:" + AutoCompleteTextField.dataGetReturnet.getIdx() + "\tContenido:"
                                 + AutoCompleteTextField.dataGetReturnet.getNombreDysplay());
-                        txtNombre.setText(AutoCompleteTextField.dataGetReturnet.getIdx());
+                        txtNombreCliente.setText(AutoCompleteTextField.dataGetReturnet.getIdx());
                     } else {
                         System.out.println("Valor:" + txtDniAutoComplete.getText());
-                        txtNombre.setText("");
+                        txtNombreCliente.setText("");
                     }
-                    listarCarrito(txtDniAutoComplete.getText());
+
                 }
             }
         });
@@ -88,29 +95,34 @@ public class MainVentas extends javax.swing.JPanel {
         txtProducto.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (AutoCompleteTextField.dataGetReturnet != null) {
-                    txtCodigo.setText(AutoCompleteTextField.dataGetReturnet.getNombreDysplay());
+                if ((e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
+                        && AutoCompleteTextField.dataGetReturnet != null) {
+                    txtCodigo.setText(AutoCompleteTextField.dataGetReturnet.getIdx());
                     String[] dataX = AutoCompleteTextField.dataGetReturnet.getOtherData().split(":");
-                    txtStock.setText(dataX[0]);
-                    txtPUnitario.setText(dataX[1]);
+                    txtPu.setText(dataX[0]);
+                    txtStock.setText(dataX[1]);
                 }
             }
         });
 
         txtCantidad.addKeyListener(new KeyAdapter() {
+            double pu = 0, cant = 0;
+
             @Override
             public void keyReleased(KeyEvent e) {
-                double cant = Double.parseDouble(String.valueOf(txtCantidad.getText()));
-                double pu = Double.parseDouble(String.valueOf(txtPUnitario.getText()));
-                txtPTotal.setText(String.valueOf(cant * pu));
+                pu = Double.parseDouble(String.valueOf(
+                        txtPu.getText().equals("") ? "0" : txtPu.getText()));
+                cant = Double.parseDouble(String.valueOf(
+                        txtCantidad.getText().equals("") ? "0" : txtCantidad.getText()));
+                txtPrecioTotal.setText(String.valueOf(pu * cant));
             }
         });
 
     }
 
     public List<CarritoTO> listarCarrito(String dni) {
-        daoC = new CarritoDao();
-        List<CarritoTO> listarCleintes = daoC.lista(dni);
+        daoCA = new CarritoDao();
+        List<CarritoTO> listarCleintes = daoCA.lista(dni);
         jTable1.setAutoCreateRowSorter(true);
         modelo = (DefaultTableModel) jTable1.getModel();
         ButtonsPanel.metaDataButtons = new String[][]{{"", "del-icon.png"}};
@@ -142,9 +154,9 @@ public class MainVentas extends javax.swing.JPanel {
             int row
                     = jTable1.convertRowIndexToModel(jTable1.getEditingRow());
             Object o = jTable1.getModel().getValueAt(row, 0);
-            daoC = new CarritoDao();
+            daoCA = new CarritoDao();
             try {
-                daoC.delete(Integer.parseInt(String.valueOf(o)));
+                daoCA.delete(Integer.parseInt(String.valueOf(o)));
                 listarCarrito(dni);
             } catch (Exception ex) {
                 System.err.println("Error:" + ex.getMessage());
@@ -153,17 +165,23 @@ public class MainVentas extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Editing: " + o);
         });
         jTable1.setModel(modelo);
-        txtImporte.setText(String.valueOf(impoTotal));
+        txtImporteTotal.setText(String.valueOf(impoTotal));
         double pv = impoTotal / 1.18;
-        txtPventa.setText(String.valueOf(Math.round(pv * 100.0) / 100.0));
+        txtPrecioB.setText(String.valueOf(Math.round(pv * 100.0) / 100.0));
         txtIgv.setText(String.valueOf(Math.round((pv * 0.18) * 100.0) / 100.0));
         return listarCleintes;
+    }
+
+    public void buscarCliente() {
+        daoC = new ClienteDao();
+        items = daoC.listAutoComplet("");
+        AutoCompleteTextField.setupAutoComplete(txtDniAutoComplete, items, "ID");//ID,NAME, OTHER     
     }
 
     public void buscarProducto() {
         daoP = new ProductoDao();
         List<ModeloDataAutocomplet> itemsP = daoP.listAutoComplet("");
-        AutoCompleteTextField.setupAutoComplete(txtProducto, itemsP, "ID");
+        AutoCompleteTextField.setupAutoComplete(txtProducto, itemsP, "nombre");
     }
 
     /**
@@ -175,12 +193,13 @@ public class MainVentas extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        autoCompleteTextField1 = new pe.com.syscenterlife.autocomp.AutoCompleteTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtDniAutoComplete = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
+        txtNombreCliente = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtDireccion = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
@@ -193,31 +212,43 @@ public class MainVentas extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtCantidad = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txtPUnitario = new javax.swing.JTextField();
+        txtPu = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        txtPTotal = new javax.swing.JTextField();
+        txtPrecioTotal = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        txtPventa = new javax.swing.JTextField();
+        txtPrecioB = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtIgv = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtDescuento = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        txtImporte = new javax.swing.JTextField();
+        txtImporteTotal = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));
 
         jLabel1.setText("DNI/RUC Cliente:");
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add-contact-icon.png"))); // NOI18N
         jButton1.setText("Add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Nombre/Razon Social:");
+
+        txtNombreCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreClienteActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Direccion:");
 
@@ -234,7 +265,7 @@ public class MainVentas extends javax.swing.JPanel {
                 .addComponent(jButton1)
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,7 +284,7 @@ public class MainVentas extends javax.swing.JPanel {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -277,6 +308,7 @@ public class MainVentas extends javax.swing.JPanel {
 
         jLabel9.setText("P.Total S/:");
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data-add-icon.png"))); // NOI18N
         jButton2.setText("Add");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -310,14 +342,14 @@ public class MainVentas extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
-                    .addComponent(txtPUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPu, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,8 +371,8 @@ public class MainVentas extends javax.swing.JPanel {
                             .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtPu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -383,6 +415,7 @@ public class MainVentas extends javax.swing.JPanel {
 
         jLabel13.setText("P. Total S/:");
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shop-cart-add-icon.png"))); // NOI18N
         jButton3.setText("R. Venta");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -397,7 +430,7 @@ public class MainVentas extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPventa, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioB, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -410,7 +443,7 @@ public class MainVentas extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
-                    .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtImporteTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -429,10 +462,10 @@ public class MainVentas extends javax.swing.JPanel {
                             .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPventa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrecioB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtIgv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtImporteTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
 
@@ -465,35 +498,58 @@ public class MainVentas extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        daoC = new CarritoDao();
+        daoCA = new CarritoDao();
         CarritoTO to = new CarritoTO();
         to.setDniruc(txtDniAutoComplete.getText());
         to.setIdProducto(Integer.parseInt(txtCodigo.getText()));
         to.setNombreProducto(txtProducto.getText());
         to.setCantidad(Double.parseDouble(txtCantidad.getText()));
-        to.setPunitario(Double.parseDouble(txtPUnitario.getText()));
-        to.setPtotal(Double.parseDouble(txtPTotal.getText()));
-        to.setEstado(1);
-        daoC.crear(to);
+        to.setPunitario(Double.parseDouble(txtPu.getText()));
+        to.setPtotal(Double.parseDouble(txtPrecioTotal.getText()));
+        to.setEstado(0);
+        daoCA.crear(to);
         listarCarrito(txtDniAutoComplete.getText());
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         registrarVenta();
-
-
-
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtNombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreClienteActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        FormCliente pvc = new FormCliente();
+        JOptionPane.showOptionDialog(null, pvc,
+                "Registrar Cliente",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, new Object[]{}, null);
+// System.out.println(x);
+        if (pvc.capturarCliente() != null) {
+            buscarCliente();
+            ClienteTO tt = (ClienteTO) pvc.capturarCliente();
+            System.out.println("ID:" + tt.getDniruc());
+            txtNombreCliente.setText(tt.getNombrers());
+            txtDniAutoComplete.setText(tt.getDniruc());
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    public void limpiarCarrito() {
+        daoCA = new CarritoDao();
+        daoCA.deleteCarAll(txtDniAutoComplete.getText());
+        listarCarrito(txtDniAutoComplete.getText());
+    }
 
     private void runReport1(int idv) {
         try {
             ConnS instance = ConnS.getInstance();
             HashMap param = new HashMap();
+            String imgen = getFile("upeulogo.png").getAbsolutePath();
             param.put("idventa", idv);
-            JasperDesign jdesign = JRXmlLoader.load(getFile("comprobante.jrxml"));
+            param.put("imagen", imgen);
+            JasperDesign jdesign = JRXmlLoader.load(getFile("Comprobante.jrxml"));
             JasperReport jreport = JasperCompileManager.compileReport(jdesign);
             JasperPrint jprint = JasperFillManager.fillReport(jreport, param,
                     instance.getConnection());
@@ -506,7 +562,7 @@ public class MainVentas extends javax.swing.JPanel {
     public File getFile(String filex) {
         File newFolder = new File("jasper");
         String ruta = newFolder.getAbsolutePath();
-//CAMINO = Paths.get(ruta+"/"+"reporte1.jrxml"); 
+        //CAMINO = Paths.get(ruta+"/"+"reporte1.jrxml"); 
         Path CAMINO = Paths.get(ruta + "/" + filex);
         System.out.println("Llegasss Ruta 2:" + CAMINO.toFile().getAbsolutePath());
         return CAMINO.toFile();
@@ -514,37 +570,34 @@ public class MainVentas extends javax.swing.JPanel {
 
     public void registrarVenta() {
         daoV = new VentaDao();
-        VentaTO to = new VentaTO();
-        to.setDniruc(txtDniAutoComplete.getText());
-        to.setPreciobase(Double.parseDouble(txtPventa.getText()));
-        to.setIgv(Double.parseDouble(txtIgv.getText()));
-        to.setPreciototal(Double.parseDouble(txtImporte.getText()));
-        int idX = daoV.createVenta(to);
 
-        List<CarritoTO> dd = listarCarrito(txtDniAutoComplete.getText());
-        if (idX != 0) {
-            for (CarritoTO car : dd) {
-                VentaDetalleTO vd = new VentaDetalleTO();
-                vd.setIdVenta(idX);
-                vd.setIdProducto(car.getIdProducto());
-                vd.setCantidad(car.getCantidad());
-                vd.setDescuento(0);
-                vd.setPu(car.getPunitario());
-                vd.setSubtotal(car.getPtotal());
-
+        List<CarritoTO> lista = listarCarrito(txtDniAutoComplete.getText());
+        VentaTO tov = new VentaTO();
+        tov.setDniruc(txtDniAutoComplete.getText());
+        tov.setIgv(Double.parseDouble(txtIgv.getText()));
+        tov.setPreciobase(Double.parseDouble(txtPrecioB.getText()));
+        tov.setPreciototal(Double.parseDouble(txtImporteTotal.getText()));
+        int idx = daoV.createVenta(tov);
+        if (idx != 0) {
+            for (CarritoTO carritoTO : lista) {
                 daoV = new VentaDao();
+                VentaDetalleTO vd = new VentaDetalleTO();
+                vd.setIdVenta(idx);
+                vd.setIdProducto(carritoTO.getIdProducto());
+                vd.setCantidad(carritoTO.getCantidad());
+                vd.setPu(carritoTO.getPunitario());
+                vd.setSubtotal(carritoTO.getPtotal());
+                vd.setDescuento(0);
                 daoV.createVentaDetalle(vd);
             }
-
         }
-        daoC = new CarritoDao();
-        daoC.deleteCarAll(txtDniAutoComplete.getText());
-        listarCarrito(txtDniAutoComplete.getText());        
-        runReport1(idX);
+        limpiarCarrito();
+        runReport1(idx);
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private pe.com.syscenterlife.autocomp.AutoCompleteTextField autoCompleteTextField1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -573,12 +626,12 @@ public class MainVentas extends javax.swing.JPanel {
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtDniAutoComplete;
     private javax.swing.JTextField txtIgv;
-    private javax.swing.JTextField txtImporte;
-    private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtPTotal;
-    private javax.swing.JTextField txtPUnitario;
+    private javax.swing.JTextField txtImporteTotal;
+    private javax.swing.JTextField txtNombreCliente;
+    private javax.swing.JTextField txtPrecioB;
+    private javax.swing.JTextField txtPrecioTotal;
     private javax.swing.JTextField txtProducto;
-    private javax.swing.JTextField txtPventa;
+    private javax.swing.JTextField txtPu;
     private javax.swing.JTextField txtStock;
     // End of variables declaration//GEN-END:variables
 }

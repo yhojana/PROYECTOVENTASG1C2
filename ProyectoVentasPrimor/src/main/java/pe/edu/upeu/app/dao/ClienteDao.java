@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
+import pe.com.syscenterlife.autocomp.AutoCompleteTextField;
 import pe.com.syscenterlife.autocomp.ModeloDataAutocomplet;
-import pe.edu.upeu.app.dao.conx.Conn;
 import pe.edu.upeu.app.dao.conx.ConnS;
 import pe.edu.upeu.app.modelo.ClienteTO;
 import pe.edu.upeu.app.util.ErrorLogger;
+
 
 /**
  *
@@ -116,7 +117,6 @@ public class ClienteDao implements ClienteDaoI {
         List<ClienteTO> listarclientes = new ArrayList();
         String sql = "SELECT * FROM cliente";
         try {
-            connection = new Conn().connectSQLite();
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -137,7 +137,6 @@ public class ClienteDao implements ClienteDaoI {
         ClienteTO cliente = new ClienteTO();
         String sql = "SELECT * FROM cliente WHERE dniruc = ?";
         try {
-            connection = new Conn().connectSQLite();
             ps = connection.prepareStatement(sql);
             ps.setString(1, dni);
             rs = ps.executeQuery();

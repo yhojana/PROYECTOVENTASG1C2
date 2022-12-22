@@ -4,12 +4,19 @@
  */
 package pe.edu.upeu.app.gui;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import pe.com.syscenterlife.formvalid.Validator;
+import pe.com.syscenterlife.formvalid.ValidatorItem;
 import pe.edu.upeu.app.dao.ClienteDao;
 import pe.edu.upeu.app.dao.ClienteDaoI;
 import pe.edu.upeu.app.modelo.ClienteTO;
+import pe.edu.upeu.app.util.ErrorLogger;
 import pe.edu.upeu.app.util.MsgBox;
 
 /**
@@ -28,6 +35,8 @@ public class MainCliente extends javax.swing.JPanel {
     ClienteDaoI cDao;
     DefaultTableModel modelo;
     MsgBox msg;
+    TableRowSorter<TableModel> trsfiltro;
+    static ErrorLogger log = new ErrorLogger(MainCliente.class.getName());
 
     public MainCliente() {
         initComponents();
@@ -168,6 +177,7 @@ public class MainCliente extends javax.swing.JPanel {
         });
 
         cbxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        cbxTipo.setSelectedIndex(-1);
         cbxTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxTipoActionPerformed(evt);
@@ -312,11 +322,16 @@ public class MainCliente extends javax.swing.JPanel {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+        List<ValidatorItem> vals = new ArrayList<>();
+        vals.add(new ValidatorItem("required|number|min:8|max:8", txtDni, "DNI"));
+        vals.add(new ValidatorItem("required", txtNombre, "Nombre"));
+        vals.add(new ValidatorItem("required", cbxTipo, "Tipo"));
+
         cDao = new ClienteDao();
         ClienteTO to = new ClienteTO();
         to.setDniruc(txtDni.getText());
         to.setNombrers(txtNombre.getText());
-        to.setTipo(cbxTipo.getSelectedItem().toString());
+        to.setTipo(cbxTipo.getSelectedItem()==null?"":cbxTipo.getSelectedItem().toString());
         int fila = jTable1.getSelectedRow();
         if (fila != -1) {
             try {
@@ -334,15 +349,23 @@ public class MainCliente extends javax.swing.JPanel {
             }
         } else {
             try {
-                if (cDao.create(to) != 0) {
-                    modelo = (DefaultTableModel) jTable1.getModel();
-                    Object nuevo[] = {modelo.getRowCount() + 1, to.getDniruc(), to.getNombrers(), to.getTipo()};
-                    modelo.addRow(nuevo);
-                    resetForm();
-                    JOptionPane.showMessageDialog(this, "Registro correcto");
+                Validator validator = new Validator(vals);
+                if (validator.isPasses()) {
+                    msg = new MsgBox();
+                    if (msg.showConfirmCustom("Esta seguro de crear un nuevo cliente ?", "Mensaje de Confirmación", "") == 0) {
+                        if (cDao.create(to) != 0) {
+                            modelo = (DefaultTableModel) jTable1.getModel();
+                            Object nuevo[] = {modelo.getRowCount() + 1, to.getDniruc(), to.getNombrers(), to.getTipo()};
+                            modelo.addRow(nuevo);
+                            resetForm();
+                            //toastMs.success("Se inserto correctamente!");
+                            JOptionPane.showMessageDialog(this, "Re registro");
+                        }
+                    }
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
+                //JOptionPane.showMessageDialog(this, e.getMessage());
+                log.log(Level.SEVERE, "Crear Cliente", e);
             }
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed

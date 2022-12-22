@@ -12,10 +12,7 @@ import java.util.List;
 import pe.edu.upeu.app.dao.conx.ConnS;
 import pe.edu.upeu.app.modelo.CarritoTO;
 
-/**
- *
- * @author DTI-Laboratorio
- */
+
 public class CarritoDao implements CarritoDaoI{
     ConnS instance=ConnS.getInstance();
     Connection coneccionx=instance.getConnection();

@@ -38,13 +38,12 @@ public class ProductoDao implements ProductoDaoI {
     public ProductoDao() {
         columnNames = new Vector();
         visitdata = new Vector();
-        connection = ConnS.getInstance().getConnection();
     }
 
     @Override
     public int create(ProductoTO d) {
         int rsId = 0;
-        String[] returns = {"id_producto"};
+        String[] returns = {"nombre"};
 
         String sql = "INSERT INTO producto( nombre, pu, utilidad, stock, id_categoria, id_marca) "
                 + " VALUES(?,?,?,?,?,?)";
@@ -73,7 +72,7 @@ public class ProductoDao implements ProductoDaoI {
 
     @Override
     public int update(ProductoTO d) {
-        System.out.println("actualizar d.getNombre: " + d.getNombre());
+        System.out.println("actualizar EL : " + d.getNombre());
         int comit = 0;
         String sql = "UPDATE producto SET "
                 + "pu=?, "
@@ -95,6 +94,7 @@ public class ProductoDao implements ProductoDaoI {
         } catch (SQLException ex) {
             log.log(Level.SEVERE, "update", ex);
         }
+        System.out.println(comit);
         return comit;
     }
 
@@ -107,7 +107,7 @@ public class ProductoDao implements ProductoDaoI {
             ps.setString(1, id);
             comit = ps.executeUpdate();
         } catch (SQLException ex) {
-            log.log(Level.SEVERE, "delete", ex);
+            log.log(Level.SEVERE, "eliminar", ex);
             // System.err.println("NO del " + ex.toString());
             throw new Exception("Detalle:" + ex.getMessage());
         }
@@ -162,7 +162,7 @@ public class ProductoDao implements ProductoDaoI {
             while (rs.next()) {
                 ModeloDataAutocomplet data = new ModeloDataAutocomplet();
                 ModeloDataAutocomplet.TIPE_DISPLAY = "ID";
-                data.setIdx(rs.getInt("idProducto") + ":" + rs.getInt("idMarca") + ":" + rs.getInt("idCategoria"));
+                data.setIdx(rs.getInt("id_Producto") + ":" + rs.getInt("id_Marca") + ":" + rs.getInt("id_Categoria"));
                 data.setNombreDysplay(rs.getString("nombre"));
                 data.setOtherData(rs.getDouble("pu") + ":" + rs.getDouble("utilidad") + ":" + rs.getDouble("stock"));
                 listarProducto.add(data);
